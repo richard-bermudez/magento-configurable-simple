@@ -58,8 +58,13 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Product_Type_Conf
 
         if(Mage::app()->getStore()->isAdmin()) {
 		$productAdmin = Mage::getModel('catalog/product')->loadByAttribute('sku',$product->getSku());
-		$product->setFinalPrice($productAdmin->getFinalPrice());
-		return $productAdmin->getFinalPrice();
+		if($productAdmin->getSpecialPrice()) {
+			$fp = $productAdmin->getSpecialPrice();
+		} else {
+			$fp = $productAdmin->getPrice();
+		}
+		$product->setFinalPrice($fp);
+		return $fp;
 	} else {
 		$product->setFinalPrice($fp);
 		return $fp;
